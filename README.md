@@ -95,8 +95,8 @@ Details on query arguments and types are available in the online GraphQL docs.
 			},
 			.....
 
-**dataInstallerDataPacks**: Will retrieve a list of all data packs installed. It can return all of the information that the other logging queries will return, but it's likely that `datapack` and `add_date` will be the most important data.
-The value of `datapack` will depend on how the data pack was installed. If it was added by module name, then that value will show the name (`MagentoEse_VerticalDataHealthBeauty`). If it was added by specifing a data path, then that value will show (`datapacks/deployed/vertical-data-frescopa`).
+**installedDataPacks**: Will retrieve a list of all data packs installed. It can return all of the information that the other logging queries will return, but it's likely that `datapack_name` and `add_date` will be the most important data.
+The value of `datapack_name` will depend on how the data pack was installed. If the data pack included a `datapack_info.json` file with the correct data, that name will be retrieved. Otherwise the full name of the data pack will be used. If it was added by module name, then that value will show the name (`MagentoEse_VerticalDataHealthBeauty`). If it was added by specifing a data path, then the last value in the path will show (`datapacks/deployed/vertical-data-frescopa` would return `vertica-data-frescopa`).
 
 *example:*
 
@@ -106,8 +106,8 @@ The value of `datapack` will depend on how the data pack was installed. If it wa
       	add_date
       	datapack
       	job_id
-      	level
-      	message
+		datapack_name
+		metadata
     	}
   	}
 	}
@@ -119,11 +119,15 @@ The value of `datapack` will depend on how the data pack was installed. If it wa
 		  "datapacks": [
 			{
 			 "add_date": "2025-01-13 15:51:53",
-			 "datapack": "datapacks/deployed/vertical-data-frescopa"
+			 "datapack": "vertical-data-frescopa"
 			},
 			{
 			  "add_date": "2025-01-13 16:27:15",
 			  "datapack": "MagentoEse_VerticalDataHealthBeauty"
+			},
+			{
+			  "add_date": "2025-01-13 16:27:15",
+			  "datapack": "CitiSignal"
 			},
 			.....
 

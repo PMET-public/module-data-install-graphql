@@ -167,11 +167,11 @@ class RequiredData implements RequiredDataInterface
     }
 
      /**
-     * Eliminate duplicate arrays within an array
-     *
-     * @param array $array
-     * @return array
-     */
+      * Eliminate duplicate arrays within an array
+      *
+      * @param array $array
+      * @return array
+      */
     private function eliminateDuplicateArrays(array $array): array
     {
         $serializedArray = array_map('serialize', $array);

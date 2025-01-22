@@ -9,7 +9,9 @@ type Query {
     dataInstallerJobStatus(
         jobId: String @doc(description: "id of job") 
     ): DataInstallerJobStatus @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallJobStatus") @doc(description:"Get status information about a Data Installer Job")
-    dataInstallerDataPacks: DataInstallerDataPacks @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallDataPacks") @doc(description:"Get list of installed data packs")
+    
+    installedDataPacks: DataInstallerDataPacks @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallDataPacks") @doc(description:"Get list of installed data packs")
+    
     customerGroups(
         identifiers: [String] @doc(description: "Names or Ids of Groups") 
     ): CustomerGroups @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerGroups") @doc(description:"Array of customer groups")
@@ -352,17 +354,13 @@ type DataInstallerLog @doc(description: "Retrieves all records from a Data insta
     log_records: [DataInstallerLogRecord] @doc(description: "An array containing the log entries from a data install job")
 }
 
-type DataInstallerLog @doc(description: "Retrieves all records from a Data install Job") {
-    log_records: [DataInstallerLogRecord] @doc(description: "An array containing the log entries from a data install job")
-}
-
 type DataInstallerJobStatus @doc(description: "Retrieves status information Data install Job") {
     job_status_text: String @doc(description: "Status Id")
     job_status: String @doc(description: "Current status of job")
 }
 
 type DataInstallerDataPacks @doc(description: "Retrieves information about installed data packs") {
-    datapacks: [DataInstallerLogRecord] @doc(description: "An array containing the data pack entries")
+    datapacks: [DataInstallerDataPack] @doc(description: "An array containing the data pack entries")
 }
 
 type ImageZipFile @doc(description: "Retrieves a zip file containing all images for a product") {
@@ -382,6 +380,14 @@ type DataInstallerLogRecord {
     datapack: String @doc(description: "Path to data pack")
     level: String @doc(description: "Type of message: info, warning or error")
     message: String @doc(description: "Information from installer")
+    add_date: String @doc(description: "Timestamp when record was added")
+}
+
+type DataInstallerDataPack {
+    job_id: String @doc(description: "Ids of job if added via scheduled job")
+    datapack: String @doc(description: "Path to data pack")
+    datapack_name: String @doc(description: "Name of data pack")
+    metadata: String @doc(description: "Meta data for data pack")
     add_date: String @doc(description: "Timestamp when record was added")
 }
 
