@@ -6,81 +6,108 @@ type Query {
         jobId: String @doc(description: "id of job if import was done via admin ui. If used, datapack value is ignored") 
         datapack: String @doc(description: "datapack installed, uses instring comparison, so full path of data pack is not needed")
     ): DataInstallerLog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallLog") @doc(description:"Get log data for a Data Installer Job")
+    
     dataInstallerJobStatus(
         jobId: String @doc(description: "id of job") 
     ): DataInstallerJobStatus @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallJobStatus") @doc(description:"Get status information about a Data Installer Job")
     
     installedDataPacks: DataInstallerDataPacks @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\DataInstall\\DataInstallDataPacks") @doc(description:"Get list of installed data packs")
+
+    instanceInfo: InstanceInfo @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Instance\\InstanceInfo") @doc(description:"Get information about the instance")
     
     customerGroups(
         identifiers: [String] @doc(description: "Names or Ids of Groups") 
     ): CustomerGroups @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerGroups") @doc(description:"Array of customer groups")
+    
     customerSegments(
         identifiers: [String] @doc(description: "Names or IDs of segments") 
     ): CustomerSegments @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\CustomerSegments") @doc(description:"Array of customer segments")
+    
     cartRules(
         identifiers: [String] @doc(description: "Names or IDs of cart rules") 
     ): CartRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CartRules") @doc(description:"Array of cart rules")
+   
     catalogRules(
         identifiers: [String] @doc(description: "Names or IDs of catalog rules") 
     ): CatalogRules @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\CatalogRules") @doc(description:"Array of catalog rules")
+    
     cmsPages(
         identifiers: [String] @doc(description: "Identifiers or IDS of the CMS pages")
     ): CmsPages @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Pages") @doc(description: "Get CMS Pages from store.")
+   
     cmsBlocksList: CmsBlocks @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\BlocksList") @doc(description: "Get CMS Pages from store.")
+    
     msiSource(
         identifiers: [String] @doc(description: "Code of the Msi Source")
     ): MsiSources @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiSource") @doc(description: "Get Msi Sources.")
+    
     msiStock(
         identifiers: [String] @doc(description: "Names or Ids of the Msi Stock")
     ): MsiStocks @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Inventory\\MsiStock") @doc(description: "Get Msi Stocks.")
+    
     rewardsPointsExchangeRate(
         identifiers: [String] @doc(description: "Ids of Echange Rates")
     ): RewardPointsRateList @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\RewardExchangeRates") @doc(description: "Get Rewards Exchange Rates")
+    
     upsells(
         identifiers: [String] @doc(description: "Names or IDs of related product rules") 
     ): Upsells @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Marketing\\Upsells") @doc(description:"Array of related product rules")
+    
     widgets(
         identifiers: [String] @doc(description: "Titles or IDs of widgets") 
     ): Widgets @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Widgets") @doc(description:"Array of widgets")
+    
     adminRoles(
         identifiers: [String] @doc(description: "Role names") 
     ): AdminRoles @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\AdminUsers\\AdminRoles") @doc(description:"Array of Admin Roles and settings")
+    
     adminUsers(
         identifiers: [String] @doc(description: "Admin Users") 
     ): AdminUsers @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\AdminUsers\\AdminUsers") @doc(description:"Array of Admin Users")
+    
     dataInstallerStoreSettings(
         restrictProductsFromViews: String @doc(description: "Optional Y or N. Importer will default to Y") 
         productImageImportDirectory: String @doc(description: "Optional. Do not include if its not used. Path from server root to directory where images should be read during product import. Defaults to data pack directory\\media\\products") 
         productValidationStrategy: String @doc(description: "Optional. Do not include if its not used. values = validation-stop-on-errors,validation-skip-errors. Importer will default to validation-skip-errors.") 
     ): DataInstallerStoreSettings @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Settings") @doc(description:"Default Store Settings")
+   
     dynamicBlocksExport(
         identifiers: [String] @doc(description: "Names or Ids of dynamic blocks") 
     ): DynamicBlocks @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\DynamicBlocks") @doc(description:"Array of Dynamic Blocks")
+    
     pageBuilderTemplates(
         identifiers: [String] @doc(description: "Names or Ids of templates") 
     ): PageBuilderTemplates @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Cms\\Templates") @doc(description:"Array of Page Builder templates")
+    
     companies(
         identifiers: [String] @doc(description: "Names or IDS of the Companies")
     ): Companies @resolver(class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\Company") @doc(description: "Get List of Companies.")
+    
     publicSharedCatalog: PublicSharedCatalog @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Company\\PublicSharedCatalog") @doc(description: "Public or default Shared catalog")
+    
     productExport(
         categoryIds: [String] @doc(description: "List of Category Ids to export products from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\ProductExport") @doc(description:"csv encoded to json array of exported product data")
+    
     customerExport(
         email: [String] @doc(description: "Commad delimited list of email address to export")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\CustomerExport") @doc(description:"csv encoded to json array of exported customer data")
+    
     customerAddressExport: Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\CustomerAddressExport") @doc(description:"csv encoded to json array of exported customer addresses")
+    
     stockSourcesExport(
         sourceCode: [String] @doc(description: "List of source code to export inventory from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\StockSourcesExport") @doc(description:"csv encoded to json array of stock sources data")
+    
     advancedPricingExport(
         categoryIds: [String] @doc(description: "List of Category Ids to export product pricing from")
     ): Export @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Export\\AdvancedPricingExport") @doc(description:"csv encoded to json array of pricing data")
+    
     storeConfigurations(
         suppressB2BSettings: Boolean @doc(description: "Optional: Set to true to suppress B2B settings from being returned")
         additionalSettings: [String] @doc(description: "Optional: Additional store configurations to return expressed as path value from core_config_data table. Example: web/secure/base_url")
     ): StoreConfigurations @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Configurations") @doc(description:"Store Admin Configuration Settings")
+    
     imagesExtract(
         categoryIds: String @doc(description: "Product Category Ids to extract images from. Comma separated list of category ids. Example: 1,2,3")
         blockIds: String @doc(description: "Comma separated list of block ids to extract images from. Example: 1,2,3")
@@ -363,6 +390,10 @@ type DataInstallerDataPacks @doc(description: "Retrieves information about insta
     datapacks: [DataInstallerDataPack] @doc(description: "An array containing the data pack entries")
 }
 
+type InstanceInfo @doc(description: "Retrieves information about the instance") {
+    datapacks: [DataInstallerDataPack] @doc(description: "An array containing the installed data pack entries")
+}
+
 type ImageZipFile @doc(description: "Retrieves a zip file containing all images for a product") {
     zip_file_download: String @doc(description: "Zip file with images in Data Pack directory structure")
     zip_file_server_path: String @doc(description: "Server path to zip file")
@@ -387,7 +418,9 @@ type DataInstallerDataPack {
     job_id: String @doc(description: "Ids of job if added via scheduled job")
     datapack: String @doc(description: "Path to data pack")
     datapack_name: String @doc(description: "Name of data pack")
-    metadata: String @doc(description: "Meta data for data pack")
+    meta_data: String @doc(description: "Meta data for data pack")
+    level: String @doc(description: "Type of message: info, warning or error")
+    message: String @doc(description: "Information from installer")
     add_date: String @doc(description: "Timestamp when record was added")
 }
 
