@@ -10,7 +10,6 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 use MagentoEse\DataInstall\Api\LoggerRepositoryInterface;
 use MagentoEse\DataInstall\Api\Data\LoggerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\TestFramework\ErrorLog\Logger;
 
 class DataInstallLog
 {
@@ -55,7 +54,7 @@ class DataInstallLog
     public function getInstalledDataPacks(): array
     {
         $logData = $this->loggerRepository->getInstalledDataPacks();
-        return $this->formatLogData($logData, 'installed', LoggerInterface::DATAPACK);
+        return $this->formatInstalledDataPackData($logData);
     }
 
     /**
@@ -82,6 +81,34 @@ class DataInstallLog
                 LoggerInterface::DATAPACK => $log[LoggerInterface::DATAPACK],
                 LoggerInterface::MESSAGE => $log[LoggerInterface::MESSAGE],
                 LoggerInterface::LEVEL => $log[LoggerInterface::LEVEL],
+                LoggerInterface::ADDDATE => $log[LoggerInterface::ADDDATE]
+            ];
+        }
+        return $results;
+    }
+
+     /**
+     * Formats log data for return
+     *
+     * @param mixed $logResults
+     * @param string $identifier
+     * @param string $type
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function formatInstalledDataPackData($logResults): array
+    {
+        if (empty($logResults)) {
+            return [];
+        }
+
+        $results = [];
+        foreach ($logResults as $log) {
+            $results[]=[
+                LoggerInterface::JOBID => $log[LoggerInterface::JOBID],
+                LoggerInterface::DATAPACK => $log[LoggerInterface::DATAPACK],
+                LoggerInterface::MESSAGE => $log[LoggerInterface::MESSAGE],
+                LoggerInterface::LEVEL => $log[LoggerInterface::LEVEL],
                 LoggerInterface::ADDDATE => $log[LoggerInterface::ADDDATE],
                 LoggerInterface::DATAPACKNAME => $log[LoggerInterface::DATAPACKNAME],
                 LoggerInterface::METADATA => $log[LoggerInterface::METADATA],
@@ -90,4 +117,5 @@ class DataInstallLog
         }
         return $results;
     }
+
 }
