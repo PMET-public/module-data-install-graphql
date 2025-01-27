@@ -40,6 +40,8 @@ class InstanceInfo implements ResolverInterface
     /** @var string  */
     private const OPENSEARCH_MODULE = 'Magento_OpenSearch';
 
+    private const PRODUCT_RECS_MODULE = 'Magento_ProductRecommendationsAdmin';
+
    /**
     *
     * @param LogDataProvider $logDataProvider
@@ -76,7 +78,8 @@ class InstanceInfo implements ResolverInterface
         
         return [
              'commerce_version' => $this->productMetadata->getVersion(),
-             'search_engine' => $this->whichSearchEngine(),             
+             'search_engine' => $this->whichSearchEngine(),
+             'product_recs' => $this->isProductRecsModuleEnabled() ? 'enabled' : 'disabled',            
              'datapacks' => $logData,
         ];
     }
@@ -87,9 +90,14 @@ class InstanceInfo implements ResolverInterface
      * @return bool
      */
 
-    private function isLiveSearchModuleInstalled(): bool
+    private function isLiveSearchModuleEnabled(): bool
     {
         return $this->moduleManager->isEnabled(self::LIVESEARCH_MODULE);
+    }
+
+    private function isProductRecsModuleEnabled(): bool
+    {
+        return $this->moduleManager->isEnabled(self::PRODUCT_RECS_MODULE);
     }
 
     /**
@@ -98,18 +106,18 @@ class InstanceInfo implements ResolverInterface
      * @return bool
      */
 
-    private function isOpenSearchModuleInstalled(): bool
+    private function isOpenSearchModuleEnabled(): bool
     {
         return $this->moduleManager->isEnabled(self::OPENSEARCH_MODULE);
     }
 
     private function whichSearchEngine(): string
     {
-        if ($this->isLiveSearchModuleInstalled() && $this->isOpenSearchModuleInstalled()) {
+        if ($this->isLiveSearchModuleEnabled() && $this->isOpenSearchModuleEnabled()) {
             return 'Both';
-        } elseif ($this->isLiveSearchModuleInstalled()) {
+        } elseif ($this->isLiveSearchModuleEnabled()) {
             return 'Live Search';
-        } elseif ($this->isOpenSearchModuleInstalled()) {
+        } elseif ($this->isOpenSearchModuleEnabled()) {
             return 'OpenSearch';
         } else {
             return 'None';
