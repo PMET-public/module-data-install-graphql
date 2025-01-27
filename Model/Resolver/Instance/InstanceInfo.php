@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Module\Manager as ModuleManager;
 
 class InstanceInfo implements ResolverInterface
 {
@@ -28,21 +29,35 @@ class InstanceInfo implements ResolverInterface
     /** @var ProductMetadataInterface */
     protected $productMetadata;
 
+    /** @var ModuleManager */
+    protected $moduleManager;
+
+    
+
+    /** @var string  */
+    private const LIVESEARCH_MODULE = 'Magento_LiveSearch';
+
+    /** @var string  */
+    private const OPENSEARCH_MODULE = 'Magento_OpenSearch';
+
    /**
     *
     * @param LogDataProvider $logDataProvider
     * @param Authentication $authentication
     * @param ProductMetadataInterface $productMetadata
+    * @param Manager $moduleManager
     * @return void
     */
     public function __construct(
         LogDataProvider $logDataProvider,
         Authentication $authentication,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        ModuleManager $moduleManager
     ) {
         $this->logDataProvider = $logDataProvider;
         $this->authentication = $authentication;
         $this->productMetadata = $productMetadata;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -61,7 +76,43 @@ class InstanceInfo implements ResolverInterface
         
         return [
              'commerce_version' => $this->productMetadata->getVersion(),
+             'search_engine' => $this->whichSearchEngine(),             
              'datapacks' => $logData,
         ];
+    }
+
+    /**
+     * Check if LiveSearch module is enabled
+     *
+     * @return bool
+     */
+
+    private function isLiveSearchModuleInstalled(): bool
+    {
+        return $this->moduleManager->isEnabled(self::LIVESEARCH_MODULE);
+    }
+
+    /**
+     * Check if OpenSearch module is enabled
+     *
+     * @return bool
+     */
+
+    private function isOpenSearchModuleInstalled(): bool
+    {
+        return $this->moduleManager->isEnabled(self::OPENSEARCH_MODULE);
+    }
+
+    private function whichSearchEngine(): string
+    {
+        if ($this->isLiveSearchModuleInstalled() && $this->isOpenSearchModuleInstalled()) {
+            return 'Both';
+        } elseif ($this->isLiveSearchModuleInstalled()) {
+            return 'LiveSearch';
+        } elseif ($this->isOpenSearchModuleInstalled()) {
+            return 'OpenSearch';
+        } else {
+            return 'None';
+        }
     }
 }

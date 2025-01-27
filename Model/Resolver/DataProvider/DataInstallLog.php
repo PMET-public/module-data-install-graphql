@@ -10,6 +10,7 @@ namespace MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider;
 use MagentoEse\DataInstall\Api\LoggerRepositoryInterface;
 use MagentoEse\DataInstall\Api\Data\LoggerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Module\Manager as ModuleManager;
 
 class DataInstallLog
 {
@@ -19,12 +20,32 @@ class DataInstallLog
     private $loggerRepository;
 
     /**
+     * @var ModuleManager
+     */ 
+    private $moduleManager;
+
+    /** 
+     * @var string  
+     */
+    private const LUMA_DATA_MODULE = 'Magento_CatalogSampleData';
+
+    /** 
+     * @var array  
+     */
+    private const LUMA_NATIVE_DATA = ["id" => 1, "datapack" => "Magento_CatalogSampleData",
+    "message" => "Luma Data Pack Installed", "level" => "warning", "add_date" => "", "datapack_name" => "Luma",
+    "metadata" => "","job_id" => ""];
+
+    /**
      * @param LoggerRepositoryInterface $loggerRepository
+     * @param ModuleManager $moduleManager
      */
     public function __construct(
-        LoggerRepositoryInterface $loggerRepository
+        LoggerRepositoryInterface $loggerRepository,
+        ModuleManager $moduleManager
     ) {
         $this->loggerRepository = $loggerRepository;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -54,6 +75,10 @@ class DataInstallLog
     public function getInstalledDataPacks(): array
     {
         $logData = $this->loggerRepository->getInstalledDataPacks();
+        // Add Luma data pack to the list of if it was installed via sample data
+        if ($this->isLumaDataPackInstalled()) {
+            $logData[] = self::LUMA_NATIVE_DATA;
+        }
         return $this->formatInstalledDataPackData($logData);
     }
 
@@ -116,5 +141,15 @@ class DataInstallLog
             ];
         }
         return $results;
+    }
+
+     /**
+     * Check if Luma data pack is installed
+     *
+     * @return bool
+     */
+    private function isLumaDataPackInstalled(): bool
+    {
+        return $this->moduleManager->isEnabled(self::LUMA_DATA_MODULE);
     }
 }
