@@ -119,15 +119,51 @@ The value of `datapack_name` will depend on how the data pack was installed. If 
 		  "datapacks": [
 			{
 			 "add_date": "2025-01-13 15:51:53",
-			 "datapack": "vertical-data-frescopa"
+			 "datapack_name": "vertical-data-frescopa"
 			},
 			{
 			  "add_date": "2025-01-13 16:27:15",
-			  "datapack": "MagentoEse_VerticalDataHealthBeauty"
+			  "datapack_name": "MagentoEse_VerticalDataHealthBeauty"
 			},
 			{
 			  "add_date": "2025-01-13 16:27:15",
-			  "datapack": "CitiSignal"
+			  "datapack_name": "CitiSignal"
+			},
+			.....
+
+**instanceInfo**: Retrieves information about the instance and its configuration.
+1. `commerce_version`
+2. `datapacks` - Returns the same information as the `installedDataPacks` query
+
+*example:*
+
+	query{
+  		instanceInfo{
+			commerce_version
+			datapacks {
+				add_date
+				datapack_name
+			}
+		}
+	}
+*returns:*
+
+	{
+	  "data": {
+		"commerce_version": "2.4.7-p3"
+		"dataInstallerLogs": {
+		  "datapacks": [
+			{
+			 "add_date": "2025-01-13 15:51:53",
+			 "datapack_name": "vertical-data-frescopa"
+			},
+			{
+			  "add_date": "2025-01-13 16:27:15",
+			  "datapack_name": "MagentoEse_VerticalDataHealthBeauty"
+			},
+			{
+			  "add_date": "2025-01-13 16:27:15",
+			  "datapack_name": "CitiSignal"
 			},
 			.....
 

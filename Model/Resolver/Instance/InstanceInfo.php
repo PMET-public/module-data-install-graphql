@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
+use Magento\Framework\App\ProductMetadataInterface;
 
 class InstanceInfo implements ResolverInterface
 {
@@ -24,18 +25,24 @@ class InstanceInfo implements ResolverInterface
     /** @var Authentication */
     protected $authentication;
 
+    /** @var ProductMetadataInterface */
+    protected $productMetadata;
+
    /**
     *
     * @param LogDataProvider $logDataProvider
     * @param Authentication $authentication
+    * @param ProductMetadataInterface $productMetadata
     * @return void
     */
     public function __construct(
         LogDataProvider $logDataProvider,
-        Authentication $authentication
+        Authentication $authentication,
+        ProductMetadataInterface $productMetadata
     ) {
         $this->logDataProvider = $logDataProvider;
         $this->authentication = $authentication;
+        $this->productMetadata = $productMetadata;
     }
 
     /**
@@ -53,6 +60,7 @@ class InstanceInfo implements ResolverInterface
         $logData = $this->logDataProvider->getInstalledDataPacks();
         
         return [
+             'commerce_version' => $this->productMetadata->getVersion(),
              'datapacks' => $logData,
         ];
     }

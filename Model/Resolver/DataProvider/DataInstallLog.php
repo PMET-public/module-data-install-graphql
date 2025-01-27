@@ -88,14 +88,14 @@ class DataInstallLog
     }
 
      /**
-     * Formats log data for return
-     *
-     * @param mixed $logResults
-     * @param string $identifier
-     * @param string $type
-     * @return array
-     * @throws NoSuchEntityException
-     */
+      * Formats log data for return
+      *
+      * @param mixed $logResults
+      * @param string $identifier
+      * @param string $type
+      * @return array
+      * @throws NoSuchEntityException
+      */
     private function formatInstalledDataPackData($logResults): array
     {
         if (empty($logResults)) {
@@ -117,5 +117,4 @@ class DataInstallLog
         }
         return $results;
     }
-
 }

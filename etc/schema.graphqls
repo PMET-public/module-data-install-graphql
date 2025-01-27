@@ -392,6 +392,7 @@ type DataInstallerDataPacks @doc(description: "Retrieves information about insta
 
 type InstanceInfo @doc(description: "Retrieves information about the instance") {
     datapacks: [DataInstallerDataPack] @doc(description: "An array containing the installed data pack entries")
+    commerce_version: String @doc(description: "Version of Magento Commerce")
 }
 
 type ImageZipFile @doc(description: "Retrieves a zip file containing all images for a product") {
