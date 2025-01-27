@@ -21,16 +21,16 @@ class DataInstallLog
 
     /**
      * @var ModuleManager
-     */ 
+     */
     private $moduleManager;
 
-    /** 
-     * @var string  
+    /**
+     * @var string
      */
     private const LUMA_DATA_MODULE = 'Magento_CatalogSampleData';
 
-    /** 
-     * @var array  
+    /**
+     * @var array
      */
     private const LUMA_NATIVE_DATA = ["id" => 1, "datapack" => "Magento_CatalogSampleData",
     "message" => "Luma Data Pack Installed", "level" => "warning", "add_date" => "", "datapack_name" => "Luma",
@@ -144,10 +144,10 @@ class DataInstallLog
     }
 
      /**
-     * Check if Luma data pack is installed
-     *
-     * @return bool
-     */
+      * Check if Luma data pack is installed
+      *
+      * @return bool
+      */
     private function isLumaDataPackInstalled(): bool
     {
         return $this->moduleManager->isEnabled(self::LUMA_DATA_MODULE);

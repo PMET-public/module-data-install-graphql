@@ -135,7 +135,8 @@ The value of `datapack_name` will depend on how the data pack was installed. If 
 1. `commerce_version`
 2. `datapacks` - Returns the same information as the `installedDataPacks` query
 3. `search_engine` - Will return OpenSearch if `Magento_OpenSearch` module is enabled, Live Search if `Magento_LiveSearch` is enabled, `Both` if both are enabled (a misconfiguration) or `None` if neither are enabled
-4. `product_recs` - returns enabled or disabled if the `Magento_ProductRecommendationsAdmin` module is enabled.
+4. `product_recs` - Returns enabled or disabled if the `Magento_ProductRecommendationsAdmin` module is enabled.
+5. `commerce_services_connector_configured` - Returns true or false if the Commerce Services Connector is configured. It only checks for the existance of values, not if they are valid
 
 *example:*
 
@@ -143,6 +144,8 @@ The value of `datapack_name` will depend on how the data pack was installed. If 
   		instanceInfo{
 			commerce_version
 			search_engine
+			product_recs
+			commerce_services_connector_configured
 			datapacks {
 				add_date
 				datapack_name
@@ -155,6 +158,8 @@ The value of `datapack_name` will depend on how the data pack was installed. If 
 	  "data": {
 		"commerce_version": "2.4.7-p3"
 		"search_engine": "Live Search"
+		"product_recs": "enabled"
+		"commerce_services_connector_configured" : true
 		"dataInstallerLogs": {
 		  "datapacks": [
 			{
