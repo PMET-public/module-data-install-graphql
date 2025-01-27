@@ -134,12 +134,14 @@ The value of `datapack_name` will depend on how the data pack was installed. If 
 **instanceInfo**: Retrieves information about the instance and its configuration.
 1. `commerce_version`
 2. `datapacks` - Returns the same information as the `installedDataPacks` query
+3. `search_engine` - Will return OpenSearch if `Magento_OpenSearch` module is enabled, Live Search if `Magento_LiveSearch` is enabled, `Both` if both are enabled (a misconfiguration) or `None` if neither are enabled
 
 *example:*
 
 	query{
   		instanceInfo{
 			commerce_version
+			search_engine
 			datapacks {
 				add_date
 				datapack_name
@@ -151,6 +153,7 @@ The value of `datapack_name` will depend on how the data pack was installed. If 
 	{
 	  "data": {
 		"commerce_version": "2.4.7-p3"
+		"search_engine": "Live Search"
 		"dataInstallerLogs": {
 		  "datapacks": [
 			{

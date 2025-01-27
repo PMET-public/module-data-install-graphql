@@ -108,7 +108,7 @@ class InstanceInfo implements ResolverInterface
         if ($this->isLiveSearchModuleInstalled() && $this->isOpenSearchModuleInstalled()) {
             return 'Both';
         } elseif ($this->isLiveSearchModuleInstalled()) {
-            return 'LiveSearch';
+            return 'Live Search';
         } elseif ($this->isOpenSearchModuleInstalled()) {
             return 'OpenSearch';
         } else {
