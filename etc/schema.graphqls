@@ -672,6 +672,12 @@ type CustomerListItem {
     firstname: String
     lastname: String
     customer_id: Int
+    account_created_in_group_id: Int
+    account_created_in_group_name: String
+    website_id: Int
+    website_name: String
+    company_id: Int
+    company_name: String
 }
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite"){

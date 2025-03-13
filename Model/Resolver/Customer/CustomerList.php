@@ -16,6 +16,10 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
+use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CustomerGroup;
+use Magento\Company\Api\CompanyRepositoryInterface as Company;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 
 class CustomerList implements ResolverInterface
 {
@@ -28,21 +32,48 @@ class CustomerList implements ResolverInterface
     /** @var Authentication */
     private $authentication;
 
+    /** @var CustomerGroup */
+    private $customerGroup;
+
+    /** @var Company */
+    private $company;
+
+    /** @var StoreRepositoryInterface */
+    private $storeRepository;
+
+    /** @var WebsiteRepositoryInterface */
+    private $websiteRepository;
+
     /**
+     * Constructor
      *
      * @param CustomerRepositoryInterface $customerRepository
      * @param SearchCriteriaBuilder $searchCriteria
      * @param Authentication $authentication
+     * @param CustomerGroup $customerGroup
+     * @param Company $company
+     * @param StoreRepositoryInterface $storeRepository
+     * @param WebsiteRepositoryInterface $websiteRepository
+     *
      * @return void
      */
+
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         SearchCriteriaBuilder $searchCriteria,
-        Authentication $authentication
+        Authentication $authentication,
+        CustomerGroup $customerGroup,
+        Company $company,
+        StoreRepositoryInterface $storeRepository,
+        WebsiteRepositoryInterface $websiteRepository
     ) {
         $this->customerRepository = $customerRepository;
         $this->searchCriteria = $searchCriteria;
         $this->authentication = $authentication;
+        $this->customerGroup = $customerGroup;
+        $this->company = $company;
+        $this->storeRepository = $storeRepository;
+        $this->websiteRepository = $websiteRepository;
     }
 
     /**
@@ -69,11 +100,19 @@ class CustomerList implements ResolverInterface
         $customerList = $this->customerRepository->getList($search)->getItems();
         $customerData = [];
         foreach ($customerList as $customer) {
+            $companyId = $customer->getExtensionAttributes()->getCompanyAttributes()->getCompanyId();
             $customerData[]=[
                 'email' => $customer->getEmail(),
                 'firstname' => $customer->getFirstname(),
                 'lastname' => $customer->getLastname(),
-                'customer_id' => $customer->getId()
+                'customer_id' => $customer->getId(),
+                'account_created_in_group_id' => $customer->getGroupId(),
+                'account_created_in_group_name' => $this->customerGroup->getGroupDataById($customer->getGroupId())['name'],
+                'website_id' => $customer->getWebsiteId(),
+                'website_name' => $this->websiteRepository->getById($customer->getWebsiteId())->getName(),
+                'company_id' => $companyId,
+                'company_name' => ($companyId == 0) ? "" : $this->company->get($companyId)->getCompanyName()
+
             ];
         }
 
