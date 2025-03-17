@@ -529,7 +529,7 @@ type Widgets @doc(description: "Retrieves all requested Widgets") {
 type Widget {
     title: String
     instance_type: String
-    theme: String  @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Store\\Theme") @doc(description:"Path of the Store's Theme")
+    theme: String
     store_view_code: String
     widget_parameters: String
     sort_order: Int

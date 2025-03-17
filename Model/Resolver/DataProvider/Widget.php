@@ -16,6 +16,7 @@ use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\ProductId;
 use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\CategoryId;
 use MagentoEse\DataInstallGraphQl\Model\Converter\DataTypes\PageId;
 use Magento\Widget\Model\WidgetFactory;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 class Widget
 {
@@ -60,6 +61,11 @@ class Widget
     private $widgetFactory;
 
     /**
+     * @var ThemeProviderInterface
+     */
+    private $themeProvider;
+
+    /**
      *
      * @param WidgetCollection $widgetCollection
      * @param WidgetInstance $widgetInstance
@@ -69,6 +75,7 @@ class Widget
      * @param CategoryId $categoryId
      * @param ProductId $productId
      * @param WidgetFactory $widgetFactory
+     * @param ThemeProviderInterface $themeProvider
      * @return void
      */
     public function __construct(
@@ -79,7 +86,8 @@ class Widget
         PageId $pageId,
         CategoryId $categoryId,
         ProductId $productId,
-        WidgetFactory $widgetFactory
+        WidgetFactory $widgetFactory,
+        ThemeProviderInterface $themeProvider
     ) {
         $this->widgetCollection = $widgetCollection;
         $this->widgetInstance = $widgetInstance;
@@ -89,6 +97,7 @@ class Widget
         $this->categoryId = $categoryId;
         $this->productId = $productId;
         $this->widgetFactory = $widgetFactory;
+        $this->themeProvider = $themeProvider;
     }
 
     /**
@@ -166,7 +175,7 @@ class Widget
         }
         return [
             'title' => $widget->getTitle(),
-            'theme' => $widget->getThemeId(),
+            'theme' => $this->themeProvider->getThemeById($widget->getThemeId())->getThemePath(),
             'instance_type' => $widget->getType(),
             'store_view_code' => $this->getStoreViewCodes($widget->getStoreIds()),
             'widget_parameters' => $this->converter->convertContent(json_encode($widget->getWidgetParameters())),

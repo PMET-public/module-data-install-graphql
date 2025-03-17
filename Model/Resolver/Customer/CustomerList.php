@@ -107,7 +107,8 @@ class CustomerList implements ResolverInterface
                 'lastname' => $customer->getLastname(),
                 'customer_id' => $customer->getId(),
                 'account_created_in_group_id' => $customer->getGroupId(),
-                'account_created_in_group_name' => $this->customerGroup->getGroupDataById($customer->getGroupId())['name'],
+                'account_created_in_group_name' =>
+                $this->customerGroup->getGroupDataById($customer->getGroupId())['name'],
                 'website_id' => $customer->getWebsiteId(),
                 'website_name' => $this->websiteRepository->getById($customer->getWebsiteId())->getName(),
                 'company_id' => $companyId,
