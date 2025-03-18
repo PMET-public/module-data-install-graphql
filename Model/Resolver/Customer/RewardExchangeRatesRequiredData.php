@@ -10,15 +10,19 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerSegment\Model\Segment;
-use Magento\CustomerSegment\Model\ResourceModel\Segment\CollectionFactory as SegmentCollection;
+use MagentoEse\DataInstallGraphQl\Model\Resolver\DataProvider\CustomerGroup as CustomerGroupProvider;
 use MagentoEse\DataInstallGraphQl\Model\Converter\Converter;
 use MagentoEse\DataInstallGraphQl\Model\Authentication;
 use MagentoEse\DataInstallGraphQl\Model\Converter\RequiredDataInterfaceFactory;
+use Magento\Reward\Model\ResourceModel\Reward\Rate\CollectionFactory as RateCollection;
+use Magento\Reward\Model\Reward\Rate;
 
-class CustomerSegmentRequiredData implements ResolverInterface
+class RewardExchangeRatesRequiredData implements ResolverInterface
 {
-    /** @var SegmentCollection */
-    protected $segmentCollection;
+    private const DEFAULT_GROUPS = ["NOT LOGGED IN","General","Wholesale","Retailer","Default (General)"];
+
+    /** @var CustomerGroupProvider */
+    protected $customerGroupProvider;
 
     /** @var Converter */
     protected $converter;
@@ -28,25 +32,40 @@ class CustomerSegmentRequiredData implements ResolverInterface
 
     /** @var RequiredDataInterfaceFactory */
     protected $requiredDataFactory;
+
+    /** @var RateCollection */
+    protected $rateCollection;
+
+    /** @var Rate */
+    protected $rate;
+
+
+
     
     /**
      * SegmentCollection
-     * @param SegmentCollection $segmentCollection
+     * @param CustomerGroupProvider $customerGroupProvider
      * @param Converter $converter
      * @param Authentication $authentication
      * @param RequiredDataInterfaceFactory $requiredDataFactory
+     * @param RateCollection $rateCollection
+     * @param Rate $rate
      * @return void
      */
     public function __construct(
-        SegmentCollection $segmentCollection,
+        CustomerGroupProvider $customerGroupProvider,
         Converter $converter,
         Authentication $authentication,
-        RequiredDataInterfaceFactory $requiredDataFactory
+        RequiredDataInterfaceFactory $requiredDataFactory,
+        RateCollection $rateCollection,
+        Rate $rate
     ) {
-        $this->segmentCollection = $segmentCollection;
+        $this->customerGroupProvider = $customerGroupProvider;
         $this->converter = $converter;
         $this->authentication = $authentication;
         $this->requiredDataFactory = $requiredDataFactory;
+        $this->rateCollection = $rateCollection;
+        $this->rate = $rate;
     }
     
     /**
@@ -62,18 +81,24 @@ class CustomerSegmentRequiredData implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $this->authentication->authorize();
-
-        if (!empty($value['segment_id'])) {
+        $groupString = '"attribute":"group_id","operator":"!=","value":"';
+        if (!empty($value['rate_id'])) {
             $requiredData = $this->requiredDataFactory->create();
-            /** @var Segment $segment */
-            $segmentResults = $this->segmentCollection->create()
-            ->addFieldToFilter('segment_id', $value['segment_id'])->getItems();
-            $segment = current($segmentResults);
+            /** @var Rate $segment */
+            $rateResults = $this->rateCollection->create()
+            ->addFieldToFilter('rate_id', $value['rate_id'])->getItems();
+            $rate = current($rateResults);
             $returnData = $requiredData->
-            getRequiredData($segment->getConditionsSerialized());
+            getRequiredData($groupString.$rate->getCustomerGroupId().'"');
+            
+            // Check if name is in DEFAULT_GROUPS
+            if (isset($returnData[0]['name']) && in_array($returnData[0]['name'], self::DEFAULT_GROUPS)) {
+                return [];
+            }
+            
             return $returnData;
         } else {
-            return null;
+            return [];
         }
     }
 }

@@ -55,8 +55,8 @@ class BlockContent implements ResolverInterface
     {
         $this->authentication->authorize();
 
-        if (!empty($value['identifier'])) {
-            $block = $this->blockRepository->getById($value['identifier']);
+        if (!empty($value['block_id'])) {
+            $block = $this->blockRepository->getById($value['block_id']);
             return $this->converter->convertContent($block->getContent());
         } else {
             return null;

@@ -503,6 +503,7 @@ type RewardPointsRate {
     direction: String @doc(description:"points_to_currency or currency_to_points")
     rate_id: Int @doc(description:"Id of rate")
     rate_text: String @doc(description:"Text description of rate")
+    requires: [RequiredData] @doc(description: "A list of customer groups used by rewards rates") @resolver (class: "\\MagentoEse\\DataInstallGraphQl\\Model\\Resolver\\Customer\\RewardExchangeRatesRequiredData")
 }
 
 type Upsells @doc(description: "Retrieves all requested Related Product Rules") {
