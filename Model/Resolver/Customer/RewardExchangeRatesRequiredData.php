@@ -38,9 +38,6 @@ class RewardExchangeRatesRequiredData implements ResolverInterface
 
     /** @var Rate */
     protected $rate;
-
-
-
     
     /**
      * SegmentCollection
