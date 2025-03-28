@@ -367,16 +367,21 @@ class ImageZipFile implements ResolverInterface
             $this->copyCmsFiles(self::CMS_PATH_ON_SERVER.$args['cmsDir'], self::CMS_PATH_DATAPACK.$args['cmsDir']);
         }
         
-        $this->zipDatapackImages();
-        $this->moveZipFile();
-        $this->deleteTempDirectory();
-        $downloadUrl = $this->getDownloadUrl($storeCode);
+        if (count($allImages) > 0) {
+            $this->zipDatapackImages();
+            $this->moveZipFile();
+            $this->deleteTempDirectory();
+            $downloadUrl = $this->getDownloadUrl($storeCode);
             
-        return [
+            return [
              'zip_file_download' => $downloadUrl,
              'zip_file_server_path' => $this->directoryList->getPath('media').'/tmp'.$this->baseDir.'.zip',
              'all_images' => $allImages,
-        ];
+            ];
+        } else {
+            return [
+            ];
+        }
     }
    
     /**
