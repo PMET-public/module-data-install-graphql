@@ -60,10 +60,10 @@ class AdminRoles implements ResolverInterface
         array $args = null
     ) {
         $this->authentication->authorize();
-
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $roleIdentifiers = $this->getRoleIdentifiers($args);
         if ($args['identifiers'][0] == '') {
-            $roleData = $this->adminRoleDataProvider->getAllAdminRolesList();
+            $roleData = $this->adminRoleDataProvider->getAllAdminRolesList($storeId);
         } else {
             $roleData = $this->getRolesData($roleIdentifiers);
         }

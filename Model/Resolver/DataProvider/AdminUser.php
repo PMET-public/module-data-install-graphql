@@ -130,7 +130,8 @@ class AdminUser
             'lastname' => $user->getLastname(),
             'password' => 'Password1',
             'role'  => $role->getRoleName(),
-            'user_id' => $userId
+            'user_id' => $userId,
+            'is_active' => $user->getIsActive()
         ];
     }
 }

@@ -106,10 +106,11 @@ class RewardExchangeRate
             $rate->getDirection(),
             $rate->getPoints(),
             $rate->getCurrencyAmount(),
-            $this->storeManager->getWebsite($rate->getWebsiteId())->getBaseCurrencyCode()
+            'USD' // Default currency code as fallback
         );
         return [
             'site_code' => $this->getWebsiteCode($rate->getWebsiteId()),
+            'site_name' => $rate->getWebsiteId() == 0 ? "All Websites" : $this->getWebsiteName($rate->getWebsiteId()),
             'customer_group' => $this->customerGroupDataProvider
             ->getGroupDataById((int)$rate->getCustomerGroupId())['name'],
             'direction' => $this->getExchangeDirection($rate->getDirection()),
@@ -130,6 +131,18 @@ class RewardExchangeRate
     {
         $site = $this->websiteRepository->getById($siteId);
         return $site->getCode();
+    }
+
+    /**
+     * Get website name by id
+     *
+     * @param int $siteId
+     * @return string
+     */
+    private function getWebsiteName($siteId)
+    {
+        $site = $this->websiteRepository->getById($siteId);
+        return $site->getName();
     }
 
     /**
